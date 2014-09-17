@@ -4,6 +4,16 @@
     <string name="app_name">LinkedJobs</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
     <string name="loading">Loading &#8230;</string>
     <string name="welcome_text">Welcome %1$s %2$s, You are a %3$s</string>
+    <string name="location_text">Location...</string>
+    <string name="date_posted_text">Date Posted</string>
+
+    <string name="all_time_posted_text">All</string>
+    <string name="_1_day_ago_date_posted">1 day ago</string>
+    <string name="_2_7_days_ago_posted">2-7 days ago</string>
+    <string name="_8_14_days_ago_posted">8-14 days ago</string>
+    <string name="_15_30_days_ago_posted">15-30 days ago</string>
+    <string name="search_button_text">Search</string>
 </resources>

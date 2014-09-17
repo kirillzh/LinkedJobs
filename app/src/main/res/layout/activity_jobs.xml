@@ -2,9 +2,118 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
-    <TextView
-        android:id="@+id/activity_profile_welcome_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/activity_profile_welcome_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:text="Keywords, job title or company"/>
+
+            <EditText
+                android:id="@+id/search_jobs"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:text="Search jobs..."/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:textSize="20dp"
+                android:text="Postal code, city or state"/>
+
+            <EditText
+                android:id="@+id/location"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:text="@string/location_text"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:textSize="20dp"
+                android:text="@string/date_posted_text"/>
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical" >
+
+                <CheckBox
+                    android:id="@+id/all_dates_posted"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/all_time_posted_text"
+                    android:checked="true"/>
+
+                <CheckBox
+                    android:id="@+id/posted_1_day_ago"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_1_day_ago_date_posted"
+                    />
+
+                <CheckBox
+                    android:id="@+id/posted_2_7_days_ago"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_2_7_days_ago_posted" />
+
+                <CheckBox
+                    android:id="@+id/posted_8_14_days_ago"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_8_14_days_ago_posted"
+                    />
+
+                <CheckBox
+                    android:id="@+id/posted_15_30_days_ago"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_15_30_days_ago_posted" />
+
+                <Button
+                    android:id="@+id/search_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/search_button_text" />
+
+            </LinearLayout>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                
+                <ListView
+                    android:id="@+id/list_view_jobs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                
+                </ScrollView>
+
+
+        </LinearLayout>
+
+
+
+        </LinearLayout>
+
 </LinearLayout>
