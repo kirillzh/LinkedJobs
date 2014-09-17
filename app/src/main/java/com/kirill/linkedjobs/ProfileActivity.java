@@ -30,7 +30,7 @@ public class ProfileActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_jobs);
         welcomeText = (TextView) findViewById(R.id.activity_profile_welcome_text);
 //Request basic profile of the user
         SharedPreferences preferences = this.getSharedPreferences("user_info", 0);
@@ -43,7 +43,9 @@ public class ProfileActivity extends Activity {
     private static final String getProfileUrl(String accessToken){
         return PROFILE_URL
                 +QUESTION_MARK
-                +OAUTH_ACCESS_TOKEN_PARAM+EQUALS+accessToken;
+                +OAUTH_ACCESS_TOKEN_PARAM
+                +EQUALS
+                +accessToken;
     }
     private class GetProfileRequestAsyncTask extends AsyncTask<String, Void, JSONObject>{
         @Override
