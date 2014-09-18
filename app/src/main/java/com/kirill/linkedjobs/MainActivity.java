@@ -1,5 +1,9 @@
 package com.kirill.linkedjobs;
 
+/**
+ * Created by kirill on 9/13/14.
+ * My GitHub: https://github.com/ZhukovKirill
+ */
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -159,9 +163,9 @@ public class MainActivity extends Activity {
             if(urls.length>0){
                 String url = urls[0];
                 HttpClient httpClient = new DefaultHttpClient();
-                HttpPost httpost = new HttpPost(url);
+                HttpPost httpPost = new HttpPost(url);
                 try{
-                    HttpResponse response = httpClient.execute(httpost);
+                    HttpResponse response = httpClient.execute(httpPost);
                     if(response!=null){
 //If status is OK 200
                         if(response.getStatusLine().getStatusCode()==200){

@@ -2,7 +2,9 @@ package com.kirill.linkedjobs;
 
 /**
  * Created by kirill on 9/13/14.
+ * My GitHub: https://github.com/ZhukovKirill
  */
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
@@ -40,7 +42,7 @@ public class JobsActivity extends Activity {
             new GetProfileRequestAsyncTask().execute(profileUrl);
         }
     }
-    private static final String getProfileUrl(String accessToken){
+    private static String getProfileUrl(String accessToken){
         return PROFILE_URL
                 +QUESTION_MARK
                 +OAUTH_ACCESS_TOKEN_PARAM
@@ -91,5 +93,5 @@ public class JobsActivity extends Activity {
                 }
             }
         }
-    };
+    }
 }
