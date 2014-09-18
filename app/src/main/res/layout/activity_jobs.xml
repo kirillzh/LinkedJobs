@@ -20,30 +20,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="@string/search_jobs_field_title"/>
-
             <EditText
                 android:id="@+id/search_jobs"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/search_jobs_hint"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:textSize="20dp"
-                android:text="@string/location_field_title"/>
-
-            <EditText
-                android:id="@+id/location"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:hint="@string/location_hint"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -52,17 +34,19 @@
                 android:textSize="20dp"
                 android:text="@string/date_posted_text"/>
 
+
+            <CheckBox
+                android:id="@+id/all_dates_posted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/all_time_posted_text"
+                android:checked="true"/>
+
+
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:orientation="vertical" >
-
-                <CheckBox
-                    android:id="@+id/all_dates_posted"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/all_time_posted_text"
-                    android:checked="true"/>
+                android:orientation="horizontal" >
 
                 <CheckBox
                     android:id="@+id/posted_1_day_ago"
@@ -77,26 +61,36 @@
                     android:layout_height="wrap_content"
                     android:text="@string/_2_7_days_ago_posted" />
 
-                <CheckBox
-                    android:id="@+id/posted_8_14_days_ago"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/_8_14_days_ago_posted"
-                    />
-
-                <CheckBox
-                    android:id="@+id/posted_15_30_days_ago"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/_15_30_days_ago_posted" />
-
-                <Button
-                    android:id="@+id/search_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/search_button_text" />
-
             </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <CheckBox
+                        android:id="@+id/posted_8_14_days_ago"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/_8_14_days_ago_posted"
+                        />
+
+                    <CheckBox
+                        android:id="@+id/posted_15_30_days_ago"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/_15_30_days_ago_posted" />
+
+                </LinearLayout>
+
+
+
+            <Button
+                android:id="@+id/search_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_button_text" />
+
 
             <ScrollView
                 android:layout_width="match_parent"
