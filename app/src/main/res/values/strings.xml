@@ -7,7 +7,7 @@
 
     <string name="loading">Loading &#8230;</string>
     <string name="welcome_text">Welcome %1$s %2$s, You are a %3$s</string>
-    <string name="location_text">Location...</string>
+    <string name="location_hint">Location…</string>
     <string name="date_posted_text">Date Posted</string>
 
     <string name="all_time_posted_text">All</string>
@@ -16,4 +16,7 @@
     <string name="_8_14_days_ago_posted">8-14 days ago</string>
     <string name="_15_30_days_ago_posted">15-30 days ago</string>
     <string name="search_button_text">Search</string>
+    <string name="search_jobs_field_title">Keywords, job title or company</string>
+    <string name="search_jobs_hint">Search jobs…</string>
+    <string name="location_field_title">Postal code, city or state</string>
 </resources>
