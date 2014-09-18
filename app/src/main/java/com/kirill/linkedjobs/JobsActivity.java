@@ -27,8 +27,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class JobsActivity extends Activity {
 
@@ -127,54 +125,25 @@ public class JobsActivity extends Activity {
             }
             if(data!=null){
 
+                String[] companies;
 
                 try {
-                    Log.e("WARN", "Nope");
-                    JSONArray jobs = data.getJSONObject("jobs").getJSONObject("values").toJSONArray(data.getJSONObject("jobs").getJSONObject("values").names());
-                    Log.e("WARN", "Got jobs JSON FILE!!!");
-//                    Iterator<String> iterator = jobs.keys();
-//                    while (iterator.hasNext()) {
-//                        String key = iterator.next();
-//                        try {
-//                            Object value = jobs.get(key);
-//                            Log.e("WARN", "" + value);
-//                        } catch (JSONException e) {
-//                            // Something went wrong!
-//                        }
-//                    }
+                    JSONArray values = data.getJSONObject("jobs").getJSONArray("values");
+                    companies = new String[values.length()];
+                    Log.e("WARN", "" + companies.length + " " + values.length());
 
-//                    for(int i = 0; i < jobs.length(); i++) {
-//                        JSONObject job = jobs.getJSONObject(i);
-//
-////                        String jobTitleString = job.getJSONObject("jobPoster").getString("descriptionSnippet");
-////                        jobTitleString = jobTitleString.split("")[0];
-////                        jobTitleTextView.setText(jobTitleString);
-//
-//                        String companyNameString = job.getJSONObject("company").getString("name");
-//                        listOfCompanies.add(companyNameString);
-//                        //companyNameTextView.setText(companyNameString);
-////                        String locationString = job.getJSONObject("jobPoster").getString("locationDescription");
-////                        locationTextView.setText(locationString);
-//                    }
+                    for(int i = 0; i < values.length(); i++) {
+                        JSONObject job = values.optJSONObject(i);
+                        String companyName = job.getJSONObject("company").getString("name");
+                        companies[i] = companyName;
+                    }
 
-
+                    ListView companiesListView = (ListView) findViewById(R.id.list_view_jobs);
+                    JobsListVewAdapter companiesListViewAdapter = new JobsListVewAdapter(JobsActivity.this, R.layout.job_listview_item, companies);
+                    companiesListView.setAdapter(companiesListViewAdapter);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-                List<String> listOfCompanies = new ArrayList<String>();
-                String[] companies = listOfCompanies.toArray(new String[listOfCompanies.size()]);
-                ListView companiesListView = (ListView) findViewById(R.id.list_view_jobs);
-                JobsListVewAdapter companiesListViewAdapter = new JobsListVewAdapter(JobsActivity.getAppContext(), companies);
-
-//                Gson gson = new GsonBuilder().setPrettyPrinting().create();
-//                JsonParser jp = new JsonParser();
-//                JsonElement je = jp.parse(String.valueOf(data));
-//                String prettyJsonString = gson.toJson(je);
-
-
-
-
             }
         }
     }
