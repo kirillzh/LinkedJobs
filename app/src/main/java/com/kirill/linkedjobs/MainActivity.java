@@ -210,8 +210,8 @@ public class MainActivity extends Activity {
             }
             if(status){
                 //If everything went Ok, change to another activity.
-                Intent startProfileActivity = new Intent(MainActivity.this, ProfileActivity.class);
-                MainActivity.this.startActivity(startProfileActivity);
+                Intent startJobSearchActivity = new Intent(MainActivity.this, JobsActivity.class);
+                MainActivity.this.startActivity(startJobSearchActivity);
             }
         }
     }
