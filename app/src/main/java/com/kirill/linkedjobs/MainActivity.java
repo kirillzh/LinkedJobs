@@ -205,7 +205,7 @@ public class MainActivity extends Activity {
                 pd.dismiss();
             }
             if(status){
-//If everything went Ok, change to another activity.
+                //If everything went Ok, change to another activity.
                 Intent startProfileActivity = new Intent(MainActivity.this, ProfileActivity.class);
                 MainActivity.this.startActivity(startProfileActivity);
             }

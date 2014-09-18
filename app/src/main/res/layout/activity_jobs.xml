@@ -24,26 +24,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20dp"
-                android:text="Keywords, job title or company"/>
+                android:text="@string/search_jobs_field_title"/>
 
             <EditText
                 android:id="@+id/search_jobs"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:text="Search jobs..."/>
+                android:hint="@string/search_jobs_hint"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:textSize="20dp"
-                android:text="Postal code, city or state"/>
+                android:text="@string/location_field_title"/>
 
             <EditText
                 android:id="@+id/location"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:text="@string/location_text"/>
+                android:hint="@string/location_hint"/>
 
             <TextView
                 android:layout_width="wrap_content"
