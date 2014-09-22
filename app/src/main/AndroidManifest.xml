@@ -5,9 +5,10 @@
     android:versionName="1.0" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/linkedin_logo_cercle_64"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
