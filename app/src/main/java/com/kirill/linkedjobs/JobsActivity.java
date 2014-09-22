@@ -6,42 +6,47 @@ package com.kirill.linkedjobs;
  */
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.TextView;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 public class JobsActivity extends Activity {
 
-    //private static final String DEFAULT_DATE_POSTED = "all";
-    private static final String JOBS_SEARCH_URL = "https://api.linkedin.com/v1/job-search";
-    private static final String JOB_SEARCH_URL = "https://api.linkedin.com/v1/jobs/";
-    private static final String PROFILE_URL = "https://api.linkedin.com/v1/people/~";
-    private static final String OAUTH_ACCESS_TOKEN_PARAM = "oauth2_access_token";
     private static final String QUESTION_MARK = "?";
     private static final String EQUALS = "=";
-    private TextView jobTitleTextView, companyNameTextView, locationTextView;
-    private ProgressDialog pd;
-    private static Context context;
-    protected String[] companies, locations, jobTitles;
-    GetCompaniesRequestAsyncTask asyncTask = new GetCompaniesRequestAsyncTask();
+    private static final String AMPERSAND = "&";
 
+    //private static final String DEFAULT_DATE_POSTED = "all";
+    private static String JOBS_SEARCH_URL = "https://api.linkedin.com/v1/job-search";
+    private static final String PROFILE_URL = "https://api.linkedin.com/v1/people/~";
+    private static final String BASE_URL = "http://api.linkedin.com/v1/";
+    private static final String JOB_SEARCH_URL = BASE_URL + "job-search";
+    private static final String JOBS_URL = BASE_URL + "jobs";
+    private static final String PEOPLE_URL = BASE_URL + "people/~";
+    private static final String OAUTH_ACCESS_TOKEN_PARAM = "oauth2_access_token";
+    private static final String FORMAT_PARAM = "format";
+    private static final String JSON_FORMAT_PARAM = FORMAT_PARAM + EQUALS + "json";
+    private static JSONArray jobs;
+
+    private TextView jobTitleTextView, companyNameTextView, locationTextView;
+    private static Context context;
+
+    private static AsyncHttpClient client = new AsyncHttpClient();
+
+    private static String accessToken = Credentials.ACCESS_TOKEN;
     public static Context getAppContext() {
         return JobsActivity.context;
     }
@@ -52,10 +57,6 @@ public class JobsActivity extends Activity {
 // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
-    }
-
-    void postResult(String output){
-        //this you will received result fired from async class of onPostExecute(result) method.
     }
 
     @Override
@@ -69,219 +70,74 @@ public class JobsActivity extends Activity {
 
         //Request most recent (random/default) jobs when user just launched app and logged in
         SharedPreferences preferences = this.getSharedPreferences("user_info", 0);
-        String accessToken = preferences.getString("accessToken", null);
-        if (accessToken != null) {
+        //String accessToken = preferences.getString("accessToken", null);
 
+//        try {
+//            getJobs(accessToken, JOBS_SEARCH_URL);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
 
-
-            String jobsUrl = getJobsUrl(accessToken);
-            new GetCompaniesRequestAsyncTask().execute(jobsUrl);
-            new GetLocationsRequestAsyncTask().execute(jobsUrl);
-
-
-            //Log.e("WARN", Arrays.toString(asyncTask.companiesArray));
-            Log.e("WARN", Arrays.toString(locations));
-
-            //
-//            JSONObject data = null;
-//            try {
-//                data = new GetJobsRequestAsyncTask().execute(jobsUrl).get();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            } catch (ExecutionException e) {
-//                e.printStackTrace();
-//            }
-//            if (data != null) {
-//
-//                try {
-//                    JSONArray values = data.getJSONObject("jobs").getJSONArray("values");
-//                    String[] companies = new String[values.length()];
-//                    String[] locations = new String[values.length()];
-//                    String[] jobTitles = new String[values.length()];
-//
-//                    Log.e("WARN", "" + companies.length + " " + values.length());
-//
-//
-//                    for (int i = 0; i < values.length(); i++) {
-//                        JSONObject job = values.optJSONObject(i);
-//                        companies[i] = job.getJSONObject("company").getString("name");
-//                        locations[i] = job.getString("locationDescription");
-//
-//
-//                        String jobUrl = getJobUrl(accessToken, job.getString("id"));
-//                        JSONObject JSONObjectJob = new GetJobsRequestAsyncTask().execute(jobUrl).get();
-//                        jobTitles[i] = JSONObjectJob.getJSONObject("position").getString("title");
-//
-//                    }
-//
-//                    Log.e("WARN", Arrays.toString(companies));
-//                    Log.e("WARN", Arrays.toString(locations));
-//                    Log.e("WARN", Arrays.toString(jobTitles));
-//
-//
-//                    ListView companiesListView = (ListView) findViewById(R.id.list_view_jobs);
-//                    JobsListVewAdapter companiesListViewAdapter = new JobsListVewAdapter(JobsActivity.this, R.layout.job_listview_item, companies);
-//                    companiesListView.setAdapter(companiesListViewAdapter);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                } catch (ExecutionException e) {
-//                    e.printStackTrace();
-//                }
-//
-//            }
-        }
-    }
-
-    private static String getJobsUrl(String accessToken) {
-        return JOBS_SEARCH_URL
-                + QUESTION_MARK
-                + OAUTH_ACCESS_TOKEN_PARAM
-                + EQUALS
-                + accessToken;
-    }
-
-    private static String getJobUrl(String accessToken, String jobId) {
-        return JOB_SEARCH_URL
-                + jobId
-                + QUESTION_MARK
-                + OAUTH_ACCESS_TOKEN_PARAM
-                + EQUALS
-                + accessToken;
-    }
-
-
-    protected class GetLocationsRequestAsyncTask extends AsyncTask<String, Void, JSONObject> {
-        private final Context asyncTaskContext;
-
-        public GetLocationsRequestAsyncTask() {
-            this.asyncTaskContext = context;
+        JOBS_SEARCH_URL += QUESTION_MARK + OAUTH_ACCESS_TOKEN_PARAM + EQUALS + accessToken + AMPERSAND + JSON_FORMAT_PARAM;
+        try {
+            jobs = getJobs(JOBS_SEARCH_URL);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
 
-
-        @Override
-        protected void onPreExecute() {
-            pd = ProgressDialog.show(JobsActivity.this, "", JobsActivity.this.getString(R.string.loading), true);
+        Log.e("!!!!!!", String.valueOf(jobs));
+        String[] companyNames = null, jobLocations = null;
+        try {
+            companyNames = getCompanyNames(jobs);
+            jobLocations = getJobLocations(jobs);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
-        @Override
-        protected JSONObject doInBackground(String... urls) {
-            if (urls.length > 0) {
-                String url = urls[0];
-                HttpClient httpClient = new DefaultHttpClient();
-                HttpGet httpget = new HttpGet(url);
-                httpget.setHeader("x-li-format", "json");
+        Log.e("WARN", Arrays.toString(companyNames));
+        Log.e("WARN", Arrays.toString(jobLocations));
+
+
+    }
+
+
+    public static JSONArray getJobs(String url) throws JSONException {
+        final JSONArray[] testArray = {null};
+        RestClient.get(url, null, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Log.e("STATUS CODE", "" + statusCode);
+
                 try {
-                    HttpResponse response = httpClient.execute(httpget);
-                    if (response != null) {
-                        //If status is OK 200
-                        if (response.getStatusLine().getStatusCode() == 200) {
-                            String result = EntityUtils.toString(response.getEntity());
-                            //Convert the string result to a JSON Object
-                            return new JSONObject(result);
-                        }
-                    }
-                } catch (IOException e) {
-                    Log.e("Authorize", "Error Http response " + e.getLocalizedMessage());
+                    Log.e("STATUS CODE", "" + statusCode);
+                    testArray[0] = response.getJSONObject("jobs").getJSONArray("values");
                 } catch (JSONException e) {
-                    Log.e("Authorize", "Error Http response " + e.getLocalizedMessage());
+                    e.printStackTrace();
                 }
             }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject data) {
-            String[] locations = null;
-            if (pd != null && pd.isShowing()) {
-                pd.dismiss();
-            }
-            try {
-                JSONArray values = data.getJSONObject("jobs").getJSONArray("values");
-                locations = new String[values.length()];
-                for (int i = 0; i < values.length(); i++) {
-                    JSONObject job = values.optJSONObject(i);
-                    locations[i] = job.getString("locationDescription");
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            JobsActivity jobsActivity = (JobsActivity) asyncTaskContext;
-            jobsActivity.locations = locations;
-            super.onPostExecute(data);
-
-        }
+        });
+        return testArray[0];
     }
 
-    protected class GetCompaniesRequestAsyncTask extends AsyncTask<String, Void, JSONObject> {
-        public AsyncResponse companiesArray=null;
-
-        private String[] POST(String[] output){
-            return output;
+    public static String[] getCompanyNames(JSONArray jobs) throws JSONException {
+        String[] companyNames = new String[jobs.length()];
+        for(int jobIndex = 0; jobIndex < jobs.length(); jobIndex++) {
+            companyNames[jobIndex] = jobs.getJSONObject(jobIndex).getJSONObject("company").getString("name");
         }
-
-        @Override
-        protected void onPreExecute() {
-            pd = ProgressDialog.show(JobsActivity.this, "", JobsActivity.this.getString(R.string.loading), true);
-        }
-
-        @Override
-        protected JSONObject doInBackground(String... urls) {
-            if (urls.length > 0) {
-                String url = urls[0];
-                HttpClient httpClient = new DefaultHttpClient();
-                HttpGet httpget = new HttpGet(url);
-                httpget.setHeader("x-li-format", "json");
-                try {
-                    HttpResponse response = httpClient.execute(httpget);
-                    if (response != null) {
-                        //If status is OK 200
-                        if (response.getStatusLine().getStatusCode() == 200) {
-                            String result = EntityUtils.toString(response.getEntity());
-                            //Convert the string result to a JSON Object
-
-                            return new JSONObject(result);
-                        }
-                    }
-                } catch (IOException e) {
-                    Log.e("Authorize", "Error Http response " + e.getLocalizedMessage());
-                } catch (JSONException e) {
-                    Log.e("Authorize", "Error Http response " + e.getLocalizedMessage());
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject data) {
-            String[] companies = null;
-            if (pd != null && pd.isShowing()) {
-                pd.dismiss();
-            }
-            try {
-                JSONArray values = data.getJSONObject("jobs").getJSONArray("values");
-                companies = new String[values.length()];
-
-                for (int i = 0; i < values.length(); i++) {
-                    JSONObject job = values.optJSONObject(i);
-                    companies[i] = job.getJSONObject("company").getString("name");
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            companiesArray.postResult(companies);
-//            JobsActivity jobsActivity = (JobsActivity) asyncTaskContext;
-//            jobsActivity.companies = companies;
-//            super.onPostExecute(data);
-        }
-
+        
+        return companyNames;
     }
+
+
+    public static String[] getJobLocations(JSONArray jobs) throws JSONException {
+        String[] jobLocations = new String[jobs.length()];
+        for(int jobIndex = 0; jobIndex < jobs.length(); jobIndex++) {
+            jobLocations[jobIndex] = jobs.getJSONObject(jobIndex).getString("locationDescription");
+        }
+        return jobLocations;
+    }
+
+
 }
 
-interface AsyncResponse {
-    void postResult(String[] output);
-}

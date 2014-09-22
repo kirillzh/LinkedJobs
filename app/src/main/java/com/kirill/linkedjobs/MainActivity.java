@@ -7,8 +7,11 @@ package com.kirill.linkedjobs;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,6 +20,7 @@ import android.view.Menu;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
@@ -62,6 +66,10 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent startJobSearchActivity = new Intent(MainActivity.this, JobsActivity.class);
+        MainActivity.this.startActivity(startJobSearchActivity);
+
         setContentView(R.layout.activity_main);
 //get the webView from the layout
         webView = (WebView) findViewById(R.id.main_activity_web_view);
@@ -70,6 +78,10 @@ public class MainActivity extends Activity {
 //Show a progress dialog to the user
         pd = ProgressDialog.show(this, "", this.getString(R.string.loading),true);
 //Set a custom web view client
+
+        if(!isNetworkAvailable()) {
+            Toast.makeText(this, "No Connection Available", Toast.LENGTH_LONG).show();
+        }
         webView.setWebViewClient(new WebViewClient(){
             @Override
             public void onPageFinished(WebView view, String url) {
@@ -152,6 +164,7 @@ public class MainActivity extends Activity {
 // Inflate the menu; this adds items to the action bar if it is present.
         return true;
     }
+
     private class PostRequestAsyncTask extends AsyncTask<String, Void, Boolean>{
         @Override
         protected void onPreExecute(){
@@ -186,7 +199,7 @@ public class MainActivity extends Activity {
                                 editor.putLong("expires", expireDate);
                                 editor.putString("accessToken", accessToken);
                                 Log.e("Access Token HERE! ", accessToken);
-                                editor.commit();
+                                editor.apply();
                                 return true;
                             }
                         }
@@ -214,4 +227,12 @@ public class MainActivity extends Activity {
             }
         }
     }
+
+    private Boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+    }
+
 }
