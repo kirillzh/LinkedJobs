@@ -19,4 +19,9 @@
     <string name="search_jobs_field_title">Keywords, job title or company</string>
     <string name="search_jobs_hint">Search jobs…</string>
     <string name="location_field_title">Postal code, city or state</string>
+    <string name="SignInText">Sign In</string>
+    <string name="EmailText">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="forgot_password_text">Forgot Password?</string>
+    <string name="sign_up_text">Sign Up</string>
 </resources>
