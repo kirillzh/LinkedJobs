@@ -82,8 +82,10 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="gson-2.3-javadoc" level="project" />
     <orderEntry type="library" exported="" name="gson-2.3-sources" level="project" />
+    <orderEntry type="library" exported="" name="volley" level="project" />
     <orderEntry type="library" exported="" name="gson-2.3" level="project" />
     <orderEntry type="library" exported="" name="android-async-http-1.4.6" level="project" />
+    <orderEntry type="library" exported="" name="retrofit-1.6.1" level="project" />
     <orderEntry type="library" exported="" name="java-json" level="project" />
   </component>
 </module>
