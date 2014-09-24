@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
@@ -39,7 +40,7 @@ public class JobsActivity extends Activity {
     private static final String OAUTH_ACCESS_TOKEN_PARAM = "oauth2_access_token";
     private static final String FORMAT_PARAM = "format";
     private static final String JSON_FORMAT_PARAM = FORMAT_PARAM + EQUALS + "json";
-    private static JSONArray jobs;
+    public static JSONArray jobs;
 
     private TextView jobTitleTextView, companyNameTextView, locationTextView;
     private static Context context;
@@ -79,8 +80,13 @@ public class JobsActivity extends Activity {
 //        }
 
         JOBS_SEARCH_URL += QUESTION_MARK + OAUTH_ACCESS_TOKEN_PARAM + EQUALS + accessToken + AMPERSAND + JSON_FORMAT_PARAM;
+
+        Log.e("TOKEN", JOBS_SEARCH_URL);
+
         try {
-            jobs = getJobs(JOBS_SEARCH_URL);
+            getJobsTest(JOBS_SEARCH_URL);
+            //Log.e("WARN", "" + jobs.getJSONObject(0));
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -101,24 +107,63 @@ public class JobsActivity extends Activity {
 
     }
 
-
-    public static JSONArray getJobs(String url) throws JSONException {
-        final JSONArray[] testArray = {null};
+    public static void getJobs(String url) throws JSONException {
         RestClient.get(url, null, new JsonHttpResponseHandler() {
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                Log.e("FAIL", "OnFailure!");
+
+            }
+
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                Log.e("STATUS CODE", "" + statusCode);
+                super.onSuccess(statusCode, headers, response);
+
+                if(JobsActivity.jobs == null) {
+                    try {
+                        Thread.sleep(5000);                 //1000 milliseconds is one second.
+                    } catch(InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }                }
+                Log.e("E", "onSuccess");
 
                 try {
-                    Log.e("STATUS CODE", "" + statusCode);
-                    testArray[0] = response.getJSONObject("jobs").getJSONArray("values");
+                    Log.e("E", "try");
+                    jobs = response.getJSONObject("jobs").getJSONArray("values");
+
+                    //store the values.
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
+
         });
-        return testArray[0];
     }
+
+
+
+
+    public static void getJobsTest(String url) throws JSONException {
+        RestClient.get(url, null, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int i, Header[] headers, byte[] bytes) {
+                Log.e("E", "pass " + i);
+
+            }
+
+            @Override
+            public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
+                Log.e("E", "fail " + i);
+            }
+        });
+
+    }
+
+
+
 
     public static String[] getCompanyNames(JSONArray jobs) throws JSONException {
         String[] companyNames = new String[jobs.length()];
