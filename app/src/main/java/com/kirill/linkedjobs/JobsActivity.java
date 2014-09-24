@@ -97,13 +97,14 @@ public class JobsActivity extends Activity {
         try {
             companyNames = getCompanyNames(jobs);
             jobLocations = getJobLocations(jobs);
+            //        getJobs(JOBS_SEARCH_URL);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         Log.e("WARN", Arrays.toString(companyNames));
         Log.e("WARN", Arrays.toString(jobLocations));
-
 
     }
 
